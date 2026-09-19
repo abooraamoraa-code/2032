@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>اطلب موقعك | أبو العز العمري</title>
+<title>اطلب موقعك | ابو حازم العمري</title>
 <style>
 :root {
     --bg-deep: #030307;
@@ -75,29 +75,29 @@ footer { text-align: center; padding: 20px; font-size: 12px; color: var(--text-m
 <body>
 
 <header>
-    <a href="index.html" class="logo">أبو العز العمري</a>
+    <a href="index.html" class="logo">ابو حازم العمري</a>
     <a href="index.html" style="color: var(--text-muted); text-decoration: none; font-size: 13px;">← العودة للرئيسية</a>
 </header>
 
 <div class="container">
     <div class="order-card">
         <h1>اطلب مشروعك البرمجي</h1>
-        <p class="sub">أدخل التفاصيل أدناه ليتم حفظه في سحابة الشركة وإرساله إليك</p>
+        <p class="sub">املأ التفاصيل أدناه ليتم تحويل طلبك مباشرة إلى رسائل فيسبوك الخاصة بنا</p>
 
         <form id="orderForm">
             <div class="form-group">
-                <label>اسمك الكامل على فيسبوك:</label>
-                <input type="text" id="fbName" required placeholder="مثال: أبو العز العمري">
+                <label>اسمك الكامل:</label>
+                <input type="text" id="custName" required placeholder="مثال: أحمد محمد">
             </div>
 
             <div class="form-group">
-                <label>تفاصيل المشروع المطلوبة:</label>
-                <textarea id="projectDetails" required placeholder="اشرح لنا فكرة موقعك أو لعبتك..."></textarea>
+                <label>تفاصيل المشروع أو اللعبة المطلوبة:</label>
+                <textarea id="projectDetails" required placeholder="اشرح فكرة موقعك أو لعبتك بالتفصيل..."></textarea>
             </div>
 
             <div class="form-group">
                 <label>الإضافات الخاصة:</label>
-                <input type="text" id="addons" placeholder="مثال: لوحة تحكم، إعلانات...">
+                <input type="text" id="addons" placeholder="مثال: لوحة تحكم، إعلانات، تصميم ثلاثي الأبعاد...">
             </div>
 
             <div class="form-group">
@@ -109,61 +109,36 @@ footer { text-align: center; padding: 20px; font-size: 12px; color: var(--text-m
                 </select>
             </div>
 
-            <button type="submit" class="submit-btn" id="submitBtn">إرسال الطلب وحفظه بالسحاب 🚀</button>
+            <button type="submit" class="submit-btn">إرسال الطلب عبر فيسبوك 🚀</button>
         </form>
     </div>
 </div>
 
 <footer>
-    جميع الحقوق محفوظة © 2026 - أبو العز العمري
+    إدارة وتطوير ابو حازم العمري © 2026
 </footer>
 
-<!-- Firebase SDK -->
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-  import { getFirestore, collection, addServerTimestamp, addDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-
-  // ضع بيانات مشروعك هنا بعد إنشائه في فايربيس
-  const firebaseConfig = {
-    apiKey: "YOUR_API_KEY",
-    authDomain: "YOUR_AUTH_DOMAIN",
-    projectId: "YOUR_PROJECT_ID",
-    storageBucket: "YOUR_STORAGE_BUCKET",
-    messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-    appId: "YOUR_APP_ID"
-  };
-
-  const app = initializeApp(firebaseConfig);
-  const db = getFirestore(app);
-
-  document.getElementById('orderForm').addEventListener('submit', async (e) => {
+<script>
+  document.getElementById('orderForm').addEventListener('submit', function(e) {
     e.preventDefault();
-    const btn = document.getElementById('submitBtn');
-    btn.disabled = true;
-    btn.innerText = "جاري الحفظ في السحاب...";
-
-    const name = document.getElementById('fbName').value;
+    
+    const name = document.getElementById('custName').value;
     const details = document.getElementById('projectDetails').value;
     const addons = document.getElementById('addons').value || "لا توجد";
     const budget = document.getElementById('budget').value;
-    const date = new Date().toLocaleString('ar-SA');
 
-    try {
-      // حفظ في قاعدة البيانات السحابية (Firestore)
-      await addDoc(collection(db, "orders"), {
-        name, details, addons, budget, date
-      });
+    // حفظ الطلب محلياً ليظهر في لوحة المشرف الخاصة بك أيضاً
+    let orders = JSON.parse(localStorage.getItem('abuliz_orders')) || [];
+    orders.unshift({ name, details, addons, budget, date: new Date().toLocaleString('ar-SA') });
+    localStorage.setItem('abuliz_orders', JSON.stringify(orders));
 
-      alert('تم حفظ طلبك بنجاح في قاعدة بيانات الشركة السحابية!');
-
-      // تحويل لمسنجر
-      const message = `مرحباً أبو العز، أريد طلب مشروع:%0a- الاسم: ${name}%0a- التفاصيل: ${details}%0a- الإضافات: ${addons}%0a- الميزانية: ${budget}`;
-      window.location.href = `https://m.me/61550351005838?text=${encodeURIComponent(message)}`;
-    } catch (error) {
-      alert('حدث خطأ بالاتصال بالسحاب. تأكد من إعدادات المفتاح.');
-      btn.disabled = false;
-      btn.innerText = "إرسال الطلب وحفظه بالسحاب 🚀";
-    }
+    // رابط حساب فيسبوك أو الماسنجر الخاص بك (استبدل الرقم برقم معرف فيسبوك الخاص بك)
+    const fbMessengerID = "61550351005838"; 
+    
+    const message = `مرحباً أبو حازم، أريد طلب مشروع برمجي:%0a- الاسم: ${name}%0a- التفاصيل: ${details}%0a- الإضافات: ${addons}%0a- الميزانية: ${budget}`;
+    
+    // التوجيه التلقائي لمسنجر فيسبوك
+    window.location.href = `https://m.me/${fbMessengerID}?text=${encodeURIComponent(message)}`;
   });
 </script>
 

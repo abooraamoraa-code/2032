@@ -97,7 +97,7 @@ footer {
 <body>
 
 <header>
-    <div class="logo">أبو العز العمري للبرمجة</div>
+    <div class="logo">إدارة وتطوير ابو حازم العمري</div>
     <div class="nav-links">
         <a href="index.html">الرئيسية</a>
         <a href="order.html" class="cta-btn">🚀 اطلب موقعك الآن</a>
@@ -124,64 +124,41 @@ footer {
         </div>
         <div class="service-card">
             <div class="service-title">⚡ حلول رقمية متكاملة</div>
-            <div class="service-desc">ربط أنظمتك بقواعد بيانات سحابية وحماية عالية تضمن استقرار مشاريعك الرقمية.</div>
+            <div class="service-desc">ربط أنظمتك ومنصاتك الرقمية وحماية عالية تضمن استقرار مشاريعك الرقمية.</div>
         </div>
     </div>
 
     <h2 class="section-title">معرض أعمال الشركة</h2>
     <p class="section-subtitle">أحدث المشاريع التي برمجتها ونفذتها شركة أبو العز</p>
     <div class="portfolio-grid" id="dynamicPortfolio">
-        <p style="color: var(--text-muted); text-align: center; grid-column: 1/-1;">جاري تحميل المشاريع من السحاب...</p>
+        <!-- المشاريع تظهر هنا ديناميكياً -->
     </div>
 </div>
 
 <footer>
-    جميع الحقوق محفوظة © 2026 - شركة أبو العز العمري للبرمجة وتطوير الألعاب
+    جميع الحقوق محفوظة © 2026 - إدارة وتطوير ابو حازم العمري للبرمجة وتطوير الألعاب
 </footer>
 
-<!-- Firebase SDK -->
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-  import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+<script>
+    // عرض المشاريع المخزنة محلياً أو مضافاً عبر لوحة التحكم
+    window.addEventListener('DOMContentLoaded', () => {
+        const portfolioContainer = document.getElementById('dynamicPortfolio');
+        let savedProjects = JSON.parse(localStorage.getItem('abuliz_projects')) || [
+            { title: "NEXUS AI Browser", desc: "متصفح ذكي ومدمج بأدوات الذكاء الاصطناعي لتصفح الويب.", link: "#" },
+            { title: "Joml Platform", desc: "منصة ويب متكاملة لإدارة الألعاب والخدمات الرقمية.", link: "#" }
+        ];
 
-  // ضع بيانات مشروعك هنا بعد إنشائه في فايربيس
-  const firebaseConfig = {
-    apiKey: "YOUR_API_KEY",
-    authDomain: "YOUR_AUTH_DOMAIN",
-    projectId: "YOUR_PROJECT_ID",
-    storageBucket: "YOUR_STORAGE_BUCKET",
-    messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-    appId: "YOUR_APP_ID"
-  };
-
-  const app = initializeApp(firebaseConfig);
-  const db = getFirestore(app);
-
-  async function loadProjects() {
-    const portfolioContainer = document.getElementById('dynamicPortfolio');
-    try {
-      const querySnapshot = await getDocs(collection(db, "projects"));
-      if (querySnapshot.empty) {
-        portfolioContainer.innerHTML = `<p style="color: var(--text-muted); text-align: center; grid-column: 1/-1;">لا توجد مشاريع مضافة حالياً.</p>`;
-        return;
-      }
-      portfolioContainer.innerHTML = '';
-      querySnapshot.forEach((doc) => {
-        const proj = doc.data();
-        portfolioContainer.innerHTML += `
-            <div class="portfolio-card">
-                <div class="portfolio-title">${proj.title}</div>
-                <div class="portfolio-desc">${proj.desc}</div>
-                <a href="${proj.link}" target="_blank" style="color: var(--accent-cyan); text-decoration: none; font-size: 13px; font-weight: bold;">استعرض المشروع ←</a>
-            </div>
-        `;
-      });
-    } catch (error) {
-      portfolioContainer.innerHTML = `<p style="color: #ef4444; text-align: center; grid-column: 1/-1;">يرجى ربط مفتاح قاعدة بيانات Firebase في الكود لعرض المشاريع.</p>`;
-    }
-  }
-
-  loadProjects();
+        portfolioContainer.innerHTML = '';
+        savedProjects.forEach(proj => {
+            portfolioContainer.innerHTML += `
+                <div class="portfolio-card">
+                    <div class="portfolio-title">${proj.title}</div>
+                    <div class="portfolio-desc">${proj.desc}</div>
+                    <a href="${proj.link}" target="_blank" style="color: var(--accent-cyan); text-decoration: none; font-size: 13px; font-weight: bold;">استعرض المشروع ←</a>
+                </div>
+            `;
+        });
+    });
 </script>
 
 </body>

@@ -1,0 +1,5 @@
+User-agent: *
+Disallow: /admin.html
+Allow: /
+
+Sitemap: https://abooraamoraa-code.github.io/2032/sitemap.xml

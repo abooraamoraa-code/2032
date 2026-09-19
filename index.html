@@ -101,7 +101,6 @@ footer {
     <div class="nav-links">
         <a href="index.html">الرئيسية</a>
         <a href="order.html" class="cta-btn">🚀 اطلب موقعك الآن</a>
-        <a href="admin.html" style="font-size: 11px; opacity: 0.5;">دخول المشرف</a>
     </div>
 </header>
 
@@ -132,7 +131,7 @@ footer {
     <h2 class="section-title">معرض أعمال الشركة</h2>
     <p class="section-subtitle">أحدث المشاريع التي برمجتها ونفذتها شركة أبو العز</p>
     <div class="portfolio-grid" id="dynamicPortfolio">
-        <!-- سيتم تعبئة المشاريع هنا تلقائياً من لوحة الأدمن -->
+        <p style="color: var(--text-muted); text-align: center; grid-column: 1/-1;">جاري تحميل المشاريع من السحاب...</p>
     </div>
 </div>
 
@@ -140,19 +139,35 @@ footer {
     جميع الحقوق محفوظة © 2026 - شركة أبو العز العمري للبرمجة وتطوير الألعاب
 </footer>
 
-<script>
-// جلب وعرض المشاريع المضافة من الأدمن
-window.addEventListener('DOMContentLoaded', () => {
+<!-- Firebase SDK -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+  import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+  // ضع بيانات مشروعك هنا بعد إنشائه في فايربيس
+  const firebaseConfig = {
+    apiKey: "YOUR_API_KEY",
+    authDomain: "YOUR_AUTH_DOMAIN",
+    projectId: "YOUR_PROJECT_ID",
+    storageBucket: "YOUR_STORAGE_BUCKET",
+    messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+    appId: "YOUR_APP_ID"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+
+  async function loadProjects() {
     const portfolioContainer = document.getElementById('dynamicPortfolio');
-    const savedProjects = JSON.parse(localStorage.getItem('adminProjects')) || [];
-
-    if (savedProjects.length === 0) {
-        portfolioContainer.innerHTML = `<p style="color: var(--text-muted); text-align: center; grid-column: 1/-1;">لا توجد مشاريع مضافة حالياً. سيقوم الأدمن بإضافة أعمال جديدة قريباً.</p>`;
+    try {
+      const querySnapshot = await getDocs(collection(db, "projects"));
+      if (querySnapshot.empty) {
+        portfolioContainer.innerHTML = `<p style="color: var(--text-muted); text-align: center; grid-column: 1/-1;">لا توجد مشاريع مضافة حالياً.</p>`;
         return;
-    }
-
-    portfolioContainer.innerHTML = '';
-    savedProjects.forEach(proj => {
+      }
+      portfolioContainer.innerHTML = '';
+      querySnapshot.forEach((doc) => {
+        const proj = doc.data();
         portfolioContainer.innerHTML += `
             <div class="portfolio-card">
                 <div class="portfolio-title">${proj.title}</div>
@@ -160,8 +175,13 @@ window.addEventListener('DOMContentLoaded', () => {
                 <a href="${proj.link}" target="_blank" style="color: var(--accent-cyan); text-decoration: none; font-size: 13px; font-weight: bold;">استعرض المشروع ←</a>
             </div>
         `;
-    });
-});
+      });
+    } catch (error) {
+      portfolioContainer.innerHTML = `<p style="color: #ef4444; text-align: center; grid-column: 1/-1;">يرجى ربط مفتاح قاعدة بيانات Firebase في الكود لعرض المشاريع.</p>`;
+    }
+  }
+
+  loadProjects();
 </script>
 
 </body>

@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>أبو العز العمري | للبرمجة وتطوير الألعاب</title>
+<style>
+:root {
+    --bg-deep: #030307;
+    --bg-card: #0a0b12;
+    --accent-blue: #0084ff;
+    --accent-cyan: #06b6d4;
+    --text-main: #f3f4f6;
+    --text-muted: #9ca3af;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, sans-serif; }
+body { background: var(--bg-deep); color: var(--text-main); min-height: 100vh; display: flex; flex-direction: column; overflow-x: hidden; }
+
+body::before {
+    content: '';
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: radial-gradient(circle at 50% 10%, rgba(0, 132, 255, 0.07) 0%, transparent 60%);
+    z-index: -1;
+}
+
+header {
+    background: rgba(3, 3, 7, 0.85);
+    backdrop-filter: blur(15px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    padding: 20px 50px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+.logo { font-size: 20px; font-weight: 900; background: linear-gradient(135deg, #fff, var(--accent-blue)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+
+.nav-links { display: flex; gap: 20px; align-items: center; }
+.nav-links a { color: var(--text-muted); text-decoration: none; font-size: 14px; transition: color 0.2s; }
+.nav-links a:hover { color: #fff; }
+
+.cta-btn {
+    background: var(--accent-blue);
+    color: #fff;
+    padding: 10px 18px;
+    border-radius: 10px;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: bold;
+    box-shadow: 0 0 20px rgba(0, 132, 255, 0.3);
+    transition: transform 0.2s;
+}
+.cta-btn:hover { transform: translateY(-2px); }
+
+.hero {
+    text-align: center;
+    padding: 100px 20px 80px 20px;
+    max-width: 900px;
+    margin: 0 auto;
+}
+.hero h1 { font-size: 48px; font-weight: 900; margin-bottom: 20px; line-height: 1.2; background: linear-gradient(135deg, #fff, var(--accent-cyan)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+.hero p { font-size: 17px; color: var(--text-muted); margin-bottom: 35px; line-height: 1.7; }
+
+.container { max-width: 1200px; margin: 0 auto; padding: 0 20px; width: 100%; }
+.section-title { font-size: 28px; font-weight: 800; text-align: center; margin-bottom: 10px; color: #fff; }
+.section-subtitle { font-size: 14px; color: var(--text-muted); text-align: center; margin-bottom: 40px; }
+
+.services-grid, .portfolio-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+    margin-bottom: 80px;
+}
+.service-card, .portfolio-card {
+    background: var(--bg-card);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 20px;
+    padding: 30px;
+}
+.service-title, .portfolio-title { font-size: 18px; font-weight: bold; margin-bottom: 10px; color: #fff; }
+.service-desc, .portfolio-desc { font-size: 13px; color: var(--text-muted); line-height: 1.6; margin-bottom: 15px; }
+
+footer {
+    background: #020204;
+    color: var(--text-muted);
+    text-align: center;
+    padding: 25px;
+    font-size: 13px;
+    border-top: 1px solid rgba(255, 255, 255, 0.03);
+    margin-top: auto;
+}
+</style>
+</head>
+<body>
+
+<header>
+    <div class="logo">أبو العز العمري للبرمجة</div>
+    <div class="nav-links">
+        <a href="index.html">الرئيسية</a>
+        <a href="order.html" class="cta-btn">🚀 اطلب موقعك الآن</a>
+        <a href="admin.html" style="font-size: 11px; opacity: 0.5;">دخول المشرف</a>
+    </div>
+</header>
+
+<div class="hero">
+    <h1>نبتكر مستقبل البرمجيات وعوالم الألعاب الرقمية</h1>
+    <p>نبني لك مواقع إلكترونية، متاجر رقمية، وتطبيقات ويب بجودة فائقة واحترافية تامة لتطوير أعمالك نحو القمة.</p>
+    <a href="order.html" class="cta-btn" style="padding: 14px 28px; font-size: 16px;">ابدأ مشروعك معنا الآن</a>
+</div>
+
+<div class="container">
+    <h2 class="section-title">خدماتنا الاحترافية</h2>
+    <p class="section-subtitle">نقدم أحدث الحلول التقنية المخصصة</p>
+    <div class="services-grid">
+        <div class="service-card">
+            <div class="service-title">🌐 تطوير المواقع وتطبيقات الويب</div>
+            <div class="service-desc">تصميم وبرمجة مواقع مخصصة، متطورة، وسريعة الاستجابة بأحدث التقنيات البرمجية.</div>
+        </div>
+        <div class="service-card">
+            <div class="service-title">🎮 تصميم وتطوير الألعاب</div>
+            <div class="service-desc">نصنع ألعاب ويب وتطبيقات تفاعلية ممتعة ومصممة بأعلى معايير الجودة والإثارة.</div>
+        </div>
+        <div class="service-card">
+            <div class="service-title">⚡ حلول رقمية متكاملة</div>
+            <div class="service-desc">ربط أنظمتك بقواعد بيانات سحابية وحماية عالية تضمن استقرار مشاريعك الرقمية.</div>
+        </div>
+    </div>
+
+    <h2 class="section-title">معرض أعمال الشركة</h2>
+    <p class="section-subtitle">أحدث المشاريع التي برمجتها ونفذتها شركة أبو العز</p>
+    <div class="portfolio-grid" id="dynamicPortfolio">
+        <!-- سيتم تعبئة المشاريع هنا تلقائياً من لوحة الأدمن -->
+    </div>
+</div>
+
+<footer>
+    جميع الحقوق محفوظة © 2026 - شركة أبو العز العمري للبرمجة وتطوير الألعاب
+</footer>
+
+<script>
+// جلب وعرض المشاريع المضافة من الأدمن
+window.addEventListener('DOMContentLoaded', () => {
+    const portfolioContainer = document.getElementById('dynamicPortfolio');
+    const savedProjects = JSON.parse(localStorage.getItem('adminProjects')) || [];
+
+    if (savedProjects.length === 0) {
+        portfolioContainer.innerHTML = `<p style="color: var(--text-muted); text-align: center; grid-column: 1/-1;">لا توجد مشاريع مضافة حالياً. سيقوم الأدمن بإضافة أعمال جديدة قريباً.</p>`;
+        return;
+    }
+
+    portfolioContainer.innerHTML = '';
+    savedProjects.forEach(proj => {
+        portfolioContainer.innerHTML += `
+            <div class="portfolio-card">
+                <div class="portfolio-title">${proj.title}</div>
+                <div class="portfolio-desc">${proj.desc}</div>
+                <a href="${proj.link}" target="_blank" style="color: var(--accent-cyan); text-decoration: none; font-size: 13px; font-weight: bold;">استعرض المشروع ←</a>
+            </div>
+        `;
+    });
+});
+</script>
+
+</body>
+</html>

@@ -70,7 +70,6 @@ header {
 }
 .contact-btn:hover { transform: translateY(-2px); }
 
-/* الأقسام */
 .page-section { display: none; padding: 50px 20px; width: 100%; max-width: 1200px; margin: 0 auto; flex: 1; }
 .page-section.active { display: block; }
 
@@ -96,8 +95,7 @@ header {
 .service-title, .portfolio-title { font-size: 18px; font-weight: bold; margin-bottom: 10px; color: #fff; }
 .service-desc, .portfolio-desc { font-size: 13px; color: var(--text-muted); line-height: 1.6; margin-bottom: 15px; }
 
-/* نماذج ولوحة التحكم */
-.order-card, .login-card, .admin-card {
+.order-card {
     background: var(--bg-card);
     border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: 20px;
@@ -106,8 +104,6 @@ header {
     margin: 0 auto;
     box-shadow: 0 15px 35px rgba(0,0,0,0.6);
 }
-.login-card { max-width: 400px; text-align: center; margin-top: 50px; }
-.admin-card { max-width: 800px; }
 
 .form-group { margin-bottom: 20px; text-align: right; }
 label { display: block; font-size: 14px; font-weight: bold; margin-bottom: 8px; color: #fff; }
@@ -152,11 +148,6 @@ textarea { resize: vertical; min-height: 120px; }
     font-weight: bold;
 }
 
-.order-item { background: rgba(0,0,0,0.3); padding: 15px; border-radius: 8px; margin-bottom: 10px; border-right: 4px solid var(--accent-blue); }
-.order-item p { font-size: 13px; color: var(--text-muted); margin-top: 5px; }
-.delete-btn { background: #ef4444; color: #fff; border: none; padding: 5px 10px; border-radius: 6px; font-size: 11px; cursor: pointer; margin-top: 8px; }
-.error-msg { color: #ef4444; font-size: 13px; margin-top: 10px; display: none; }
-
 footer {
     background: #020204;
     color: var(--text-muted);
@@ -176,7 +167,6 @@ footer {
         <button class="nav-btn" onclick="switchPage('home')">الرئيسية</button>
         <button class="nav-btn" onclick="switchPage('order')">اطلب موقعك</button>
         <a href="https://www.facebook.com/profile.php?id=61591794734274" target="_blank" class="contact-btn">💬 تواصل مع أبو العز</a>
-        <button class="nav-btn" onclick="switchPage('admin')" style="opacity: 0.3; font-size: 11px;">⚙️ الإدارة</button>
     </div>
 </header>
 
@@ -213,11 +203,11 @@ footer {
     <div class="portfolio-grid" id="dynamicPortfolio"></div>
 </div>
 
-<!-- صفحة الطلب (ترسل مباشرة للوحة التحكم) -->
+<!-- صفحة الطلب -->
 <div id="order" class="page-section">
     <div class="order-card">
         <h2 style="font-size: 24px; color: #fff; text-align: center; margin-bottom: 10px;">اطلب مشروعك البرمجي</h2>
-        <p style="font-size: 14px; color: var(--text-muted); text-align: center; margin-bottom: 30px;">املأ التفاصيل أدناه ليتم حفظ طلبك مباشرة في لوحة تحكم أبو العز السرية</p>
+        <p style="font-size: 14px; color: var(--text-muted); text-align: center; margin-bottom: 30px;">املأ التفاصيل أدناه ليتم حفظ طلبك مباشرة في لوحة تحكم أبو العز</p>
 
         <div class="success-alert" id="successAlert">✅ تم إرسال طلبك بنجاح إلى لوحة تحكم أبو العز وسيتم مراجعته قريباً!</div>
 
@@ -246,41 +236,8 @@ footer {
                 </select>
             </div>
 
-            <button type="submit" class="submit-btn">إرسال الطلب إلى لوحة التحكم 🚀</button>
+            <button type="submit" class="submit-btn">إرسال الطلب 🚀</button>
         </form>
-    </div>
-</div>
-
-<!-- لوحة المشرف -->
-<div id="admin" class="page-section">
-    <div class="login-card" id="loginBox">
-        <h2 style="color: #fff; margin-bottom: 15px;">🔐 بوابة إدارة أبو العز</h2>
-        <p style="color: var(--text-muted); font-size: 13px; margin-bottom: 20px;">أدخل كلمة المرور السرية للوصول</p>
-        <input type="password" id="adminPass" placeholder="كلمة المرور..." style="text-align: center; margin-bottom: 15px;">
-        <button class="submit-btn" onclick="checkPassword()">دخول النظام</button>
-        <div class="error-msg" id="errorMsg">❌ كلمة المرور غير صحيحة!</div>
-    </div>
-
-    <div class="admin-card" id="adminPanel" style="display: none;">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
-            <h2 style="color: #fff; font-size: 20px;">🛡️ لوحة تحكم شركة أبو العز</h2>
-            <button class="submit-btn" style="width: auto; padding: 6px 15px; background: #ef4444; font-size: 12px;" onclick="logout()">خروج</button>
-        </div>
-        
-        <div style="background: rgba(255,255,255,0.02); padding: 20px; border-radius: 12px; margin-bottom: 25px; border: 1px solid rgba(255,255,255,0.05);">
-            <h3 style="font-size: 15px; color: #fff; margin-bottom: 12px;">➕ إضافة مشروع جديد لمعرض الأعمال</h3>
-            <div class="form-group"><input type="text" id="projTitle" placeholder="عنوان المشروع..."></div>
-            <div class="form-group"><textarea id="projDesc" placeholder="وصف موجز للمشروع..." style="min-height: 70px;"></textarea></div>
-            <div class="form-group"><input type="text" id="projLink" placeholder="رابط المشروع (https://...)"></div>
-            <button class="submit-btn" onclick="addNewProject()">نشر المشروع في الموقع</button>
-        </div>
-
-        <div style="background: rgba(255,255,255,0.02); padding: 20px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.05);">
-            <h3 style="font-size: 15px; color: #fff; margin-bottom: 12px;">📥 طلبات الزبائن الواردة (مباشرة)</h3>
-            <div id="ordersList">
-                <p style="color: var(--text-muted); font-size: 13px;">جاري تحميل الطلبات...</p>
-            </div>
-        </div>
     </div>
 </div>
 
@@ -315,7 +272,7 @@ footer {
         });
     }
 
-    // إرسال الطلب مباشرة إلى لوحة التحكم دون الانتقال لخارج الصفحة
+    // إرسال الطلب وتخزينه في التخزين المحلي المشترك للمتصفح ليظهر في لوحة الإدارة الخارجية
     document.getElementById('orderForm').addEventListener('submit', function(e) {
         e.preventDefault();
         
@@ -328,7 +285,6 @@ footer {
         orders.unshift({ name, details, addons, budget, date: new Date().toLocaleString('ar-SA') });
         localStorage.setItem('abuliz_orders', JSON.stringify(orders));
 
-        // إظهار تنبيه النجاح وتفريغ الحقول
         const alertBox = document.getElementById('successAlert');
         alertBox.style.display = 'block';
         document.getElementById('orderForm').reset();
@@ -337,77 +293,6 @@ footer {
             alertBox.style.display = 'none';
         }, 5000);
     });
-
-    function checkPassword() {
-        const pass = document.getElementById('adminPass').value;
-        if (pass === "ابو العز 2012") {
-            document.getElementById('loginBox').style.display = 'none';
-            document.getElementById('adminPanel').style.display = 'block';
-            loadOrders();
-        } else {
-            document.getElementById('errorMsg').style.display = 'block';
-        }
-    }
-
-    function logout() {
-        document.getElementById('adminPass').value = '';
-        document.getElementById('adminPanel').style.display = 'none';
-        document.getElementById('loginBox').style.display = 'block';
-        document.getElementById('errorMsg').style.display = 'none';
-    }
-
-    function loadOrders() {
-        const ordersContainer = document.getElementById('ordersList');
-        let orders = JSON.parse(localStorage.getItem('abuliz_orders')) || [];
-        
-        if (orders.length === 0) {
-            ordersContainer.innerHTML = `<p style="color: var(--text-muted); font-size: 13px;">لا توجد طلبات جديدة حالياً.</p>`;
-            return;
-        }
-
-        ordersContainer.innerHTML = '';
-        orders.forEach((ord, index) => {
-            ordersContainer.innerHTML += `
-                <div class="order-item">
-                    <strong style="color: #fff;">👤 الاسم: ${ord.name}</strong>
-                    <p>📝 <b>التفاصيل:</b> ${ord.details}</p>
-                    <p>⚡ <b>الإضافات:</b> ${ord.addons} | 💰 <b>الميزانية:</b> ${ord.budget}</p>
-                    <p style="font-size: 11px; opacity: 0.6;">⏰ ${ord.date}</p>
-                    <button class="delete-btn" onclick="deleteOrder(${index})">حذف الطلب</button>
-                </div>
-            `;
-        });
-    }
-
-    function deleteOrder(index) {
-        if (confirm('هل أنت متأكد من حذف هذا الطلب؟')) {
-            let orders = JSON.parse(localStorage.getItem('abuliz_orders')) || [];
-            orders.splice(index, 1);
-            localStorage.setItem('abuliz_orders', JSON.stringify(orders));
-            loadOrders();
-        }
-    }
-
-    function addNewProject() {
-        const title = document.getElementById('projTitle').value;
-        const desc = document.getElementById('projDesc').value;
-        const link = document.getElementById('projLink').value;
-
-        if (!title || !desc || !link) {
-            alert('الرجاء تعبئة كافة حقول المشروع!');
-            return;
-        }
-
-        let projects = JSON.parse(localStorage.getItem('abuliz_projects')) || [];
-        projects.unshift({ title, desc, link });
-        localStorage.setItem('abuliz_projects', JSON.stringify(projects));
-
-        alert('تم إضافة المشروع بنجاح!');
-        document.getElementById('projTitle').value = '';
-        document.getElementById('projDesc').value = '';
-        document.getElementById('projLink').value = '';
-        loadPortfolio();
-    }
 
     window.onload = loadPortfolio;
 </script>

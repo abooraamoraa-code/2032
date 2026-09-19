@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>بوابة المشرف | أبو العز العمري</title>
+<style>
+:root {
+    --bg-deep: #030307;
+    --bg-card: #0a0b12;
+    --accent-blue: #0084ff;
+    --text-main: #f3f4f6;
+    --text-muted: #9ca3af;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, sans-serif; }
+body { background: var(--bg-deep); color: var(--text-main); min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px; }
+
+.login-box, .admin-panel {
+    background: var(--bg-card);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 20px;
+    padding: 30px;
+    width: 100%;
+    max-width: 750px;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.6);
+}
+.login-box { max-width: 420px; text-align: center; }
+h2 { margin-bottom: 20px; color: #fff; }
+input, textarea {
+    width: 100%;
+    padding: 12px 16px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    color: #fff;
+    font-size: 14px;
+    margin-bottom: 15px;
+    outline: none;
+}
+.login-box input { text-align: center; }
+.btn {
+    background: var(--accent-blue);
+    color: #fff;
+    border: none;
+    width: 100%;
+    padding: 12px;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 0 15px rgba(0, 132, 255, 0.3);
+}
+.error { color: #ef4444; font-size: 13px; margin-top: 10px; display: none; }
+
+.admin-panel { display: none; text-align: right; }
+.section-box { background: rgba(255,255,255,0.02); padding: 20px; border-radius: 12px; margin-bottom: 25px; border: 1px solid rgba(255,255,255,0.05); }
+.order-item, .proj-item { background: rgba(0,0,0,0.3); padding: 15px; border-radius: 8px; margin-bottom: 10px; border-right: 4px solid var(--accent-blue); }
+.order-item p, .proj-item p { font-size: 13px; color: var(--text-muted); margin-top: 5px; }
+.delete-btn { background: #ef4444; color: #fff; border: none; padding: 5px 10px; border-radius: 6px; font-size: 11px; cursor: pointer; margin-top: 8px; }
+</style>
+</head>
+<body>
+
+<!-- شاشة تسجيل الدخول -->
+<div class="login-box" id="loginBox">
+    <h2>🔐 بوابة إدارة أبو العز</h2>
+    <p style="color: var(--text-muted); font-size: 13px; margin-bottom: 20px;">أدخل كلمة المرور السرية للوصول</p>
+    <input type="password" id="adminPass" placeholder="كلمة المرور...">
+    <button class="btn" onclick="checkPassword()">دخول النظام</button>
+    <div class="error" id="errorMsg">❌ كلمة المرور غير صحيحة!</div>
+</div>
+
+<!-- لوحة التحكم المحمية -->
+<div class="admin-panel" id="adminPanel">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+        <h2>🛡️ لوحة تحكم شركة أبو العز</h2>
+        <button class="btn" style="width: auto; padding: 8px 15px; background: #ef4444; font-size: 12px;" onclick="logout()">خروج</button>
+    </div>
+    
+    <!-- صندوق إضافة مشروع جديد لمعرض أعمال الشركة -->
+    <div class="section-box">
+        <h3 style="font-size: 16px; color: #fff; margin-bottom: 12px;">➕ إضافة موقع أو مشروع جديد للشركة</h3>
+        <input type="text" id="projTitle" placeholder="اسم المشروع (مثال: متجر الكتروني)">
+        <textarea id="projDesc" placeholder="وصف موجز للمشروع..." style="min-height: 70px;"></textarea>
+        <input type="text" id="projLink" placeholder="رابط المشروع (مثال: https://...)">
+        <button class="btn" onclick="addProject()">إضافة المشروع للموقع الرئيسي</button>
+    </div>
+
+    <!-- صندوق رسائل وطلبات الزبائن الواردة -->
+    <div class="section-box">
+        <h3 style="font-size: 16px; color: #fff; margin-bottom: 12px;">📥 رسائل وطلبات الزبائن الواردة</h3>
+        <div id="ordersList">
+            <p style="color: var(--text-muted); font-size: 13px;">لا توجد طلبات جديدة حالياً.</p>
+        </div>
+    </div>
+</div>
+
+<script>
+function checkPassword() {
+    const pass = document.getElementById('adminPass').value;
+    if (pass === "ابو العز 2012") {
+        document.getElementById('loginBox').style.display = 'none';
+        document.getElementById('adminPanel').style.display = 'block';
+        loadAdminData();
+    } else {
+        document.getElementById('errorMsg').style.display = 'block';
+    }
+}
+
+function logout() {
+    document.getElementById('adminPass').value = '';
+    document.getElementById('adminPanel').style.display = 'none';
+    document.getElementById('loginBox').style.display = 'block';
+    document.getElementById('errorMsg').style.display = 'none';
+}
+
+// تحميل الطلبات والمشاريع داخل لوحة الأدمن
+function loadAdminData() {
+    // عرض الطلبات الواردة
+    const ordersContainer = document.getElementById('ordersList');
+    const orders = JSON.parse(localStorage.getItem('adminOrders')) || [];
+    
+    if (orders.length === 0) {
+        ordersContainer.innerHTML = `<p style="color: var(--text-muted); font-size: 13px;">لا توجد طلبات جديدة حالياً.</p>`;
+    } else {
+        ordersContainer.innerHTML = '';
+        orders.forEach((ord, index) => {
+            ordersContainer.innerHTML += `
+                <div class="order-item">
+                    <strong style="color: #fff;">👤 الاسم على فيسبوك: ${ord.name}</strong>
+                    <p>📝 <b>التفاصيل:</b> ${ord.details}</p>
+                    <p>⚡ <b>الإضافات:</b> ${ord.addons} | 💰 <b>الميزانية:</b> ${ord.budget}</p>
+                    <p style="font-size: 11px; opacity: 0.6;">⏰ ${ord.date}</p>
+                    <button class="delete-btn" onclick="deleteOrder(${index})">حذف الطلب</button>
+                </div>
+            `;
+        });
+    }
+}
+
+// إضافة مشروع جديد لمعرض الأعمال
+function addProject() {
+    const title = document.getElementById('projTitle').value;
+    const desc = document.getElementById('projDesc').value;
+    const link = document.getElementById('projLink').value;
+
+    if (!title || !desc || !link) {
+        alert('الرجاء تعبئة كافة حقول المشروع!');
+        return;
+    }
+
+    const newProj = { title, desc, link };
+    const projects = JSON.parse(localStorage.getItem('adminProjects')) || [];
+    projects.push(newProj);
+    localStorage.setItem('adminProjects', JSON.stringify(projects));
+
+    alert('تمت إضافة المشروع بنجاح وسيظهر فوراً في موقع الشركة الرئيسي!');
+    document.getElementById('projTitle').value = '';
+    document.getElementById('projDesc').value = '';
+    document.getElementById('projLink').value = '';
+}
+
+// حذف طلب زبون
+function deleteOrder(index) {
+    const orders = JSON.parse(localStorage.getItem('adminOrders')) || [];
+    orders.splice(index, 1);
+    localStorage.setItem('adminOrders', JSON.stringify(orders));
+    loadAdminData();
+}
+</script>
+
+</body>
+</html>

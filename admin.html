@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>بوابة المشرف | ابو حازم العمري</title>
+<title>بوابة المشرف | أبو العز</title>
 <style>
 :root {
     --bg-deep: #030307;
@@ -15,17 +15,19 @@
 * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, sans-serif; }
 body { background: var(--bg-deep); color: var(--text-main); min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px; }
 
-.login-box, .admin-panel {
+.login-card, .admin-card {
     background: var(--bg-card);
     border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: 20px;
-    padding: 30px;
+    padding: 40px;
     width: 100%;
-    max-width: 750px;
     box-shadow: 0 15px 35px rgba(0,0,0,0.6);
 }
-.login-box { max-width: 420px; text-align: center; }
-h2 { margin-bottom: 20px; color: #fff; }
+.login-card { max-width: 400px; text-align: center; }
+.admin-card { max-width: 800px; display: none; text-align: right; }
+
+.form-group { margin-bottom: 20px; text-align: right; }
+label { display: block; font-size: 14px; font-weight: bold; margin-bottom: 8px; color: #fff; }
 input, textarea {
     width: 100%;
     padding: 12px 16px;
@@ -34,61 +36,61 @@ input, textarea {
     border-radius: 10px;
     color: #fff;
     font-size: 14px;
-    margin-bottom: 15px;
     outline: none;
+    transition: border-color 0.2s;
 }
-.login-box input { text-align: center; }
-.btn {
+.login-card input { text-align: center; margin-bottom: 15px; }
+input:focus, textarea:focus { border-color: var(--accent-blue); }
+textarea { resize: vertical; min-height: 80px; }
+
+.submit-btn {
     background: var(--accent-blue);
     color: #fff;
     border: none;
     width: 100%;
-    padding: 12px;
+    padding: 14px;
     border-radius: 10px;
     font-size: 15px;
     font-weight: bold;
     cursor: pointer;
     box-shadow: 0 0 15px rgba(0, 132, 255, 0.3);
 }
-.error { color: #ef4444; font-size: 13px; margin-top: 10px; display: none; }
+.submit-btn:hover { opacity: 0.9; }
 
-.admin-panel { display: none; text-align: right; }
-.section-box { background: rgba(255,255,255,0.02); padding: 20px; border-radius: 12px; margin-bottom: 25px; border: 1px solid rgba(255,255,255,0.05); }
 .order-item { background: rgba(0,0,0,0.3); padding: 15px; border-radius: 8px; margin-bottom: 10px; border-right: 4px solid var(--accent-blue); }
 .order-item p { font-size: 13px; color: var(--text-muted); margin-top: 5px; }
 .delete-btn { background: #ef4444; color: #fff; border: none; padding: 5px 10px; border-radius: 6px; font-size: 11px; cursor: pointer; margin-top: 8px; }
+.error-msg { color: #ef4444; font-size: 13px; margin-top: 10px; display: none; }
 </style>
 </head>
 <body>
 
 <!-- شاشة تسجيل الدخول -->
-<div class="login-box" id="loginBox">
-    <h2>🔐 بوابة إدارة ابو حازم</h2>
+<div class="login-card" id="loginBox">
+    <h2 style="color: #fff; margin-bottom: 15px;">🔐 إدارة أبو العز</h2>
     <p style="color: var(--text-muted); font-size: 13px; margin-bottom: 20px;">أدخل كلمة المرور السرية للوصول</p>
     <input type="password" id="adminPass" placeholder="كلمة المرور...">
-    <button class="btn" onclick="checkPassword()">دخول النظام</button>
-    <div class="error" id="errorMsg">❌ كلمة المرور غير صحيحة!</div>
+    <button class="submit-btn" onclick="checkPassword()">دخول النظام</button>
+    <div class="error-msg" id="errorMsg">❌ كلمة المرور غير صحيحة!</div>
 </div>
 
 <!-- لوحة التحكم المحمية -->
-<div class="admin-panel" id="adminPanel">
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-        <h2>🛡️ لوحة تحكم إدارة وتطوير ابو حازم</h2>
-        <button class="btn" style="width: auto; padding: 8px 15px; background: #ef4444; font-size: 12px;" onclick="logout()">خروج</button>
+<div class="admin-card" id="adminPanel">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
+        <h2 style="color: #fff; font-size: 20px;">🛡️ لوحة تحكم شركة أبو العز</h2>
+        <button class="submit-btn" style="width: auto; padding: 6px 15px; background: #ef4444; font-size: 12px;" onclick="logout()">خروج</button>
     </div>
     
-    <!-- إضافة مشروع جديد لمعرض الأعمال -->
-    <div class="section-box">
-        <h3 style="font-size: 16px; color: #fff; margin-bottom: 12px;">➕ إضافة موقع أو مشروع جديد لمعرض الأعمال</h3>
-        <input type="text" id="projTitle" placeholder="عنوان المشروع...">
-        <textarea id="projDesc" placeholder="وصف موجز للمشروع..." style="min-height: 70px;"></textarea>
-        <input type="text" id="projLink" placeholder="رابط المشروع (https://...)">
-        <button class="btn" onclick="addNewProject()">نشر المشروع في الموقع الرئيسي</button>
+    <div style="background: rgba(255,255,255,0.02); padding: 20px; border-radius: 12px; margin-bottom: 25px; border: 1px solid rgba(255,255,255,0.05);">
+        <h3 style="font-size: 15px; color: #fff; margin-bottom: 12px;">➕ إضافة مشروع جديد لمعرض الأعمال</h3>
+        <div class="form-group"><input type="text" id="projTitle" placeholder="عنوان المشروع..."></div>
+        <div class="form-group"><textarea id="projDesc" placeholder="وصف موجز للمشروع..."></textarea></div>
+        <div class="form-group"><input type="text" id="projLink" placeholder="رابط المشروع (https://...)"></div>
+        <button class="submit-btn" onclick="addNewProject()">نشر المشروع في الموقع الرئيسي</button>
     </div>
 
-    <!-- صندوق طلبات الزبائن -->
-    <div class="section-box">
-        <h3 style="font-size: 16px; color: #fff; margin-bottom: 12px;">📥 طلبات الزبائن الواردة</h3>
+    <div style="background: rgba(255,255,255,0.02); padding: 20px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.05);">
+        <h3 style="font-size: 15px; color: #fff; margin-bottom: 12px;">📥 طلبات الزبائن الواردة</h3>
         <div id="ordersList">
             <p style="color: var(--text-muted); font-size: 13px;">جاري تحميل الطلبات...</p>
         </div>
@@ -96,75 +98,75 @@ input, textarea {
 </div>
 
 <script>
-  function checkPassword() {
-    const pass = document.getElementById('adminPass').value;
-    if (pass === "ابو العز 2012") {
-        document.getElementById('loginBox').style.display = 'none';
-        document.getElementById('adminPanel').style.display = 'block';
-        loadOrders();
-    } else {
-        document.getElementById('errorMsg').style.display = 'block';
-    }
-  }
-
-  function logout() {
-    document.getElementById('adminPass').value = '';
-    document.getElementById('adminPanel').style.display = 'none';
-    document.getElementById('loginBox').style.display = 'block';
-    document.getElementById('errorMsg').style.display = 'none';
-  }
-
-  function loadOrders() {
-    const ordersContainer = document.getElementById('ordersList');
-    let orders = JSON.parse(localStorage.getItem('abuliz_orders')) || [];
-    
-    if (orders.length === 0) {
-        ordersContainer.innerHTML = `<p style="color: var(--text-muted); font-size: 13px;">لا توجد طلبات جديدة حالياً.</p>`;
-        return;
+    function checkPassword() {
+        const pass = document.getElementById('adminPass').value;
+        if (pass === "ابو العز 2012") {
+            document.getElementById('loginBox').style.display = 'none';
+            document.getElementById('adminPanel').style.display = 'block';
+            loadOrders();
+        } else {
+            document.getElementById('errorMsg').style.display = 'block';
+        }
     }
 
-    ordersContainer.innerHTML = '';
-    orders.forEach((ord, index) => {
-        ordersContainer.innerHTML += `
-            <div class="order-item">
-                <strong style="color: #fff;">👤 الاسم: ${ord.name}</strong>
-                <p>📝 <b>التفاصيل:</b> ${ord.details}</p>
-                <p>⚡ <b>الإضافات:</b> ${ord.addons} | 💰 <b>الميزانية:</b> ${ord.budget}</p>
-                <p style="font-size: 11px; opacity: 0.6;">⏰ ${ord.date}</p>
-                <button class="delete-btn" onclick="deleteOrder(${index})">حذف الطلب</button>
-            </div>
-        `;
-    });
-  }
+    function logout() {
+        document.getElementById('adminPass').value = '';
+        document.getElementById('adminPanel').style.display = 'none';
+        document.getElementById('loginBox').style.display = 'block';
+        document.getElementById('errorMsg').style.display = 'none';
+    }
 
-  function deleteOrder(index) {
-    if (confirm('هل أنت متأكد من حذف هذا الطلب؟')) {
+    function loadOrders() {
+        const ordersContainer = document.getElementById('ordersList');
         let orders = JSON.parse(localStorage.getItem('abuliz_orders')) || [];
-        orders.splice(index, 1);
-        localStorage.setItem('abuliz_orders', JSON.stringify(orders));
-        loadOrders();
+        
+        if (orders.length === 0) {
+            ordersContainer.innerHTML = `<p style="color: var(--text-muted); font-size: 13px;">لا توجد طلبات جديدة حالياً.</p>`;
+            return;
+        }
+
+        ordersContainer.innerHTML = '';
+        orders.forEach((ord, index) => {
+            ordersContainer.innerHTML += `
+                <div class="order-item">
+                    <strong style="color: #fff;">👤 الاسم: ${ord.name}</strong>
+                    <p>📝 <b>التفاصيل:</b> ${ord.details}</p>
+                    <p>⚡ <b>الإضافات:</b> ${ord.addons} | 💰 <b>الميزانية:</b> ${ord.budget}</p>
+                    <p style="font-size: 11px; opacity: 0.6;">⏰ ${ord.date}</p>
+                    <button class="delete-btn" onclick="deleteOrder(${index})">حذف الطلب</button>
+                </div>
+            `;
+        });
     }
-  }
 
-  function addNewProject() {
-    const title = document.getElementById('projTitle').value;
-    const desc = document.getElementById('projDesc').value;
-    const link = document.getElementById('projLink').value;
-
-    if (!title || !desc || !link) {
-        alert('الرجاء تعبئة كافة حقول المشروع!');
-        return;
+    function deleteOrder(index) {
+        if (confirm('هل أنت متأكد من حذف هذا الطلب؟')) {
+            let orders = JSON.parse(localStorage.getItem('abuliz_orders')) || [];
+            orders.splice(index, 1);
+            localStorage.setItem('abuliz_orders', JSON.stringify(orders));
+            loadOrders();
+        }
     }
 
-    let projects = JSON.parse(localStorage.getItem('abuliz_projects')) || [];
-    projects.unshift({ title, desc, link });
-    localStorage.setItem('abuliz_projects', JSON.stringify(projects));
+    function addNewProject() {
+        const title = document.getElementById('projTitle').value;
+        const desc = document.getElementById('projDesc.value') || document.getElementById('projDesc').value;
+        const link = document.getElementById('projLink').value;
 
-    alert('تم إضافة المشروع بنجاح وسيعرض في الموقع الرئيسي!');
-    document.getElementById('projTitle').value = '';
-    document.getElementById('projDesc').value = '';
-    document.getElementById('projLink').value = '';
-  }
+        if (!title || !desc || !link) {
+            alert('الرجاء تعبئة كافة حقول المشروع!');
+            return;
+        }
+
+        let projects = JSON.parse(localStorage.getItem('abuliz_projects')) || [];
+        projects.unshift({ title, desc, link });
+        localStorage.setItem('abuliz_projects', JSON.stringify(projects));
+
+        alert('تم نشر المشروع بنجاح في الموقع الرئيسي!');
+        document.getElementById('projTitle').value = '';
+        document.getElementById('projDesc').value = '';
+        document.getElementById('projLink').value = '';
+    }
 </script>
 
 </body>

@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>بوابة المشرف | أبو العز العمري</title>
+<title>بوابة المشرف | ابو حازم العمري</title>
 <style>
 :root {
     --bg-deep: #030307;
@@ -63,7 +63,7 @@ input, textarea {
 
 <!-- شاشة تسجيل الدخول -->
 <div class="login-box" id="loginBox">
-    <h2>🔐 بوابة إدارة أبو العز السحابية</h2>
+    <h2>🔐 بوابة إدارة ابو حازم</h2>
     <p style="color: var(--text-muted); font-size: 13px; margin-bottom: 20px;">أدخل كلمة المرور السرية للوصول</p>
     <input type="password" id="adminPass" placeholder="كلمة المرور...">
     <button class="btn" onclick="checkPassword()">دخول النظام</button>
@@ -73,95 +73,80 @@ input, textarea {
 <!-- لوحة التحكم المحمية -->
 <div class="admin-panel" id="adminPanel">
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-        <h2>🛡️ لوحة تحكم شركة أبو العز السحابية</h2>
+        <h2>🛡️ لوحة تحكم إدارة وتطوير ابو حازم</h2>
         <button class="btn" style="width: auto; padding: 8px 15px; background: #ef4444; font-size: 12px;" onclick="logout()">خروج</button>
     </div>
     
-    <!-- صندوق إضافة مشروع جديد لمعرض أعمال الشركة -->
+    <!-- إضافة مشروع جديد لمعرض الأعمال -->
     <div class="section-box">
-        <h3 style="font-size: 16px; color: #fff; margin-bottom: 12px;">➕ إضافة موقع أو مشروع جديد للسحاب</h3>
-        <input type="text" id="projTitle" placeholder="اسم المشروع...">
+        <h3 style="font-size: 16px; color: #fff; margin-bottom: 12px;">➕ إضافة موقع أو مشروع جديد لمعرض الأعمال</h3>
+        <input type="text" id="projTitle" placeholder="عنوان المشروع...">
         <textarea id="projDesc" placeholder="وصف موجز للمشروع..." style="min-height: 70px;"></textarea>
         <input type="text" id="projLink" placeholder="رابط المشروع (https://...)">
         <button class="btn" onclick="addNewProject()">نشر المشروع في الموقع الرئيسي</button>
     </div>
 
-    <!-- صندوق رسائل وطلبات الزبائن السحابية -->
+    <!-- صندوق طلبات الزبائن -->
     <div class="section-box">
-        <h3 style="font-size: 16px; color: #fff; margin-bottom: 12px;">📥 طلبات الزبائن الواردة (من السحاب)</h3>
+        <h3 style="font-size: 16px; color: #fff; margin-bottom: 12px;">📥 طلبات الزبائن الواردة</h3>
         <div id="ordersList">
             <p style="color: var(--text-muted); font-size: 13px;">جاري تحميل الطلبات...</p>
         </div>
     </div>
 </div>
 
-<!-- Firebase SDK -->
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-  import { getFirestore, collection, getDocs, addDoc, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-
-  // ضع بيانات مشروعك هنا بعد إنشائه في فايربيس
-  const firebaseConfig = {
-    apiKey: "YOUR_API_KEY",
-    authDomain: "YOUR_AUTH_DOMAIN",
-    projectId: "YOUR_PROJECT_ID",
-    storageBucket: "YOUR_STORAGE_BUCKET",
-    messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-    appId: "YOUR_APP_ID"
-  };
-
-  const app = initializeApp(firebaseConfig);
-  const db = getFirestore(app);
-
-  // حماية بكلمة المرور
-  window.checkPassword = function() {
+<script>
+  function checkPassword() {
     const pass = document.getElementById('adminPass').value;
     if (pass === "ابو العز 2012") {
         document.getElementById('loginBox').style.display = 'none';
         document.getElementById('adminPanel').style.display = 'block';
-        fetchCloudOrders();
+        loadOrders();
     } else {
         document.getElementById('errorMsg').style.display = 'block';
     }
   }
 
-  window.logout = function() {
+  function logout() {
     document.getElementById('adminPass').value = '';
     document.getElementById('adminPanel').style.display = 'none';
     document.getElementById('loginBox').style.display = 'block';
     document.getElementById('errorMsg').style.display = 'none';
   }
 
-  // جلب الطلبات من قاعدة البيانات
-  async function fetchCloudOrders() {
+  function loadOrders() {
     const ordersContainer = document.getElementById('ordersList');
-    try {
-        const querySnapshot = await getDocs(collection(db, "orders"));
-        if (querySnapshot.empty) {
-            ordersContainer.innerHTML = `<p style="color: var(--text-muted); font-size: 13px;">لا توجد طلبات جديدة حالياً.</p>`;
-            return;
-        }
-        ordersContainer.innerHTML = '';
-        querySnapshot.forEach((documentSnapshot) => {
-            const ord = documentSnapshot.data();
-            const docId = documentSnapshot.id;
-            ordersContainer.innerHTML += `
-                <div class="order-item">
-                    <strong style="color: #fff;">👤 الاسم: ${ord.name}</strong>
-                    <p>📝 <b>التفاصيل:</b> ${ord.details}</p>
-                    <p>⚡ <b>الإضافات:</b> ${ord.addons} | 💰 <b>الميزانية:</b> ${ord.budget}</p>
-                    <p style="font-size: 11px; opacity: 0.6;">⏰ ${ord.date}</p>
-                    <button class="delete-btn" onclick="deleteOrder('${docId}')">حذف الطلب</button>
-                </div>
-            `;
-        });
-    } catch (e) {
-        ordersContainer.innerHTML = `<p style="color: #ef4444; font-size: 13px;">خطأ في الاتصال بقاعدة البيانات السحابية.</p>`;
+    let orders = JSON.parse(localStorage.getItem('abuliz_orders')) || [];
+    
+    if (orders.length === 0) {
+        ordersContainer.innerHTML = `<p style="color: var(--text-muted); font-size: 13px;">لا توجد طلبات جديدة حالياً.</p>`;
+        return;
+    }
+
+    ordersContainer.innerHTML = '';
+    orders.forEach((ord, index) => {
+        ordersContainer.innerHTML += `
+            <div class="order-item">
+                <strong style="color: #fff;">👤 الاسم: ${ord.name}</strong>
+                <p>📝 <b>التفاصيل:</b> ${ord.details}</p>
+                <p>⚡ <b>الإضافات:</b> ${ord.addons} | 💰 <b>الميزانية:</b> ${ord.budget}</p>
+                <p style="font-size: 11px; opacity: 0.6;">⏰ ${ord.date}</p>
+                <button class="delete-btn" onclick="deleteOrder(${index})">حذف الطلب</button>
+            </div>
+        `;
+    });
+  }
+
+  function deleteOrder(index) {
+    if (confirm('هل أنت متأكد من حذف هذا الطلب؟')) {
+        let orders = JSON.parse(localStorage.getItem('abuliz_orders')) || [];
+        orders.splice(index, 1);
+        localStorage.setItem('abuliz_orders', JSON.stringify(orders));
+        loadOrders();
     }
   }
 
-  // إضافة مشروع جديد للسحاب
-  window.addNewProject = async function() {
+  function addNewProject() {
     const title = document.getElementById('projTitle').value;
     const desc = document.getElementById('projDesc').value;
     const link = document.getElementById('projLink').value;
@@ -171,27 +156,14 @@ input, textarea {
         return;
     }
 
-    try {
-        await addDoc(collection(db, "projects"), { title, desc, link });
-        alert('تم نشر المشروع في السحاب وعرضه في الموقع الرئيسي بنجاح!');
-        document.getElementById('projTitle').value = '';
-        document.getElementById('projDesc').value = '';
-        document.getElementById('projLink').value = '';
-    } catch (e) {
-        alert('فشل في نشر المشروع.');
-    }
-  }
+    let projects = JSON.parse(localStorage.getItem('abuliz_projects')) || [];
+    projects.unshift({ title, desc, link });
+    localStorage.setItem('abuliz_projects', JSON.stringify(projects));
 
-  // حذف طلب من السحاب
-  window.deleteOrder = async function(docId) {
-    if (confirm('هل أنت متأكد من حذف هذا الطلب؟')) {
-        try {
-            await deleteDoc(doc(db, "orders", docId));
-            fetchCloudOrders();
-        } catch (e) {
-            alert('فشل في الحذف.');
-        }
-    }
+    alert('تم إضافة المشروع بنجاح وسيعرض في الموقع الرئيسي!');
+    document.getElementById('projTitle').value = '';
+    document.getElementById('projDesc').value = '';
+    document.getElementById('projLink').value = '';
   }
 </script>
 

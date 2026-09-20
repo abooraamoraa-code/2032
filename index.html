@@ -200,7 +200,7 @@ footer {
     </div>
 
     <h2 class="section-title">معرض أعمال الشركة</h2>
-    <p class="section-subtitle">أحدث المشاريع التي برمجتها ونفذتها شركة أبو العز</p>
+    <p class="section-subtitle">أحدث المشاريع المعتمدة في قاعدة بيانات أبو العز</p>
     <div class="portfolio-grid" id="dynamicPortfolio"></div>
 </div>
 
@@ -208,36 +208,32 @@ footer {
 <div id="order" class="page-section">
     <div class="order-card">
         <h2 style="font-size: 24px; color: #fff; text-align: center; margin-bottom: 10px;">اطلب مشروعك البرمجي</h2>
-        <p style="font-size: 14px; color: var(--text-muted); text-align: center; margin-bottom: 30px;">املأ التفاصيل أدناه ليتم حفظ طلبك مباشرة في لوحة تحكم أبو العز</p>
+        <p style="font-size: 14px; color: var(--text-muted); text-align: center; margin-bottom: 30px;">املأ التفاصيل أدناه ليتم إرسال طلبك مباشرة إلى لوحة تحكم أبو العز</p>
 
-        <div class="success-alert" id="successAlert">✅ تم إرسال طلبك بنجاح إلى لوحة تحكم أبو العز وسيتم مراجعته قريباً!</div>
+        <div class="success-alert" id="successAlert">✅ تم إرسال طلبك بنجاح إلى قاعدة البيانات وسيتم مراجعته قريباً!</div>
 
         <form id="orderForm">
             <div class="form-group">
-                <label>اسمك الكامل:</label>
+                <label>اسمك الكامل أو اسم المطور:</label>
                 <input type="text" id="custName" required placeholder="مثال: أحمد محمد">
             </div>
 
             <div class="form-group">
-                <label>تفاصيل المشروع أو اللعبة المطلوبة:</label>
-                <textarea id="projectDetails" required placeholder="اشرح فكرة موقعك أو لعبتك بالتفصيل..."></textarea>
+                <label>اسم المشروع / اللعبة:</label>
+                <input type="text" id="projTitle" required placeholder="مثال: لعبة المتاهة الذكية">
             </div>
 
             <div class="form-group">
-                <label>الإضافات الخاصة:</label>
-                <input type="text" id="addons" placeholder="مثال: لوحة تحكم، إعلانات، تصميم ثلاثي الأبعاد...">
+                <label>رابط المشروع أو الملف:</label>
+                <input type="text" id="projUrl" required placeholder="https://...">
             </div>
 
             <div class="form-group">
-                <label>اختر الميزانية المتوقعة:</label>
-                <select id="budget">
-                    <option value="ميزانية اقتصادية">ميزانية اقتصادية</option>
-                    <option value="ميزانية متوسطة (احترافية)">ميزانية متوسطة (احترافية)</option>
-                    <option value="ميزانية ضخمة (موقع متكامل)">ميزانية ضخمة (موقع متكامل)</option>
-                </select>
+                <label>التفاصيل أو التصنيف:</label>
+                <textarea id="projectDetails" required placeholder="اشرح فكرة مشروعك..."></textarea>
             </div>
 
-            <button type="submit" class="submit-btn">إرسال الطلب 🚀</button>
+            <button type="submit" class="submit-btn">إرسال الطلب للسيرفر 🚀</button>
         </form>
     </div>
 </div>
@@ -254,44 +250,71 @@ footer {
         if(pageId === 'home') loadPortfolio();
     }
 
-    function loadPortfolio() {
+    // جلب الألعاب المعتمدة مباشرة من قاعدة بيانات السيرفر (SQLite)
+    async function loadPortfolio() {
         const portfolioContainer = document.getElementById('dynamicPortfolio');
-        let savedProjects = JSON.parse(localStorage.getItem('abuliz_projects')) || [
-            { title: "NEXUS AI Browser", desc: "متصفح ذكي ومدمج بأدوات الذكاء الاصطناعي لتصفح الويب.", link: "#" },
-            { title: "Joml Platform", desc: "منصة ويب متكاملة لإدارة الألعاب والخدمات الرقمية.", link: "#" }
-        ];
+        portfolioContainer.innerHTML = '<p style="color: var(--text-muted); text-align: center; grid-column: 1/-1;">جاري جلب المشاريع من السيرفر...</p>';
+        
+        try {
+            const response = await fetch('/api/games?status=approved');
+            const games = await response.json();
+            
+            portfolioContainer.innerHTML = '';
+            
+            if (games.length === 0) {
+                portfolioContainer.innerHTML = '<p style="color: var(--text-muted); text-align: center; grid-column: 1/-1;">لا توجد مشاريع معتمدة حالياً. كن اول المضيفين!</p>';
+                return;
+            }
 
-        portfolioContainer.innerHTML = '';
-        savedProjects.forEach(proj => {
-            portfolioContainer.innerHTML += `
-                <div class="portfolio-card">
-                    <div class="portfolio-title">${proj.title}</div>
-                    <div class="portfolio-desc">${proj.desc}</div>
-                    <a href="${proj.link}" target="_blank" style="color: var(--accent-cyan); text-decoration: none; font-size: 13px; font-weight: bold;">استعرض المشروع ←</a>
-                </div>
-            `;
-        });
+            games.forEach(proj => {
+                portfolioContainer.innerHTML += `
+                    <div class="portfolio-card">
+                        <div class="portfolio-title">${proj.title}</div>
+                        <div class="portfolio-desc">${proj.cat} - ${proj.developer_tag}</div>
+                        <a href="${proj.url}" target="_blank" style="color: var(--accent-cyan); text-decoration: none; font-size: 13px; font-weight: bold;">استعرض المشروع ←</a>
+                    </div>
+                `;
+            });
+        } catch (err) {
+            portfolioContainer.innerHTML = '<p style="color: #f87171; text-align: center; grid-column: 1/-1;">خطأ في الاتصال بقاعدة بيانات السيرفر.</p>';
+        }
     }
 
-    document.getElementById('orderForm').addEventListener('submit', function(e) {
+    // إرسال طلب المشروع الجديد إلى السيرفر ليخزن في SQLite
+    document.getElementById('orderForm').addEventListener('submit', async function(e) {
         e.preventDefault();
         
-        const name = document.getElementById('custName').value;
-        const details = document.getElementById('projectDetails').value;
-        const addons = document.getElementById('addons').value || "لا توجد";
-        const budget = document.getElementById('budget').value;
+        const developer = document.getElementById('custName').value;
+        const title = document.getElementById('projTitle').value;
+        const url = document.getElementById('projUrl').value;
+        const cat = document.getElementById('projectDetails').value;
 
-        let orders = JSON.parse(localStorage.getItem('abuliz_orders')) || [];
-        orders.unshift({ name, details, addons, budget, date: new Date().toLocaleString('ar-SA') });
-        localStorage.setItem('abuliz_orders', JSON.stringify(orders));
+        try {
+            const res = await fetch('/api/games', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ 
+                    title, 
+                    cat, 
+                    physics_engine: 'Standard', 
+                    gravity_scale: 1.0, 
+                    url, 
+                    developer 
+                })
+            });
 
-        const alertBox = document.getElementById('successAlert');
-        alertBox.style.display = 'block';
-        document.getElementById('orderForm').reset();
-
-        setTimeout(() => {
-            alertBox.style.display = 'none';
-        }, 5000);
+            const data = await res.json();
+            if (res.ok) {
+                const alertBox = document.getElementById('successAlert');
+                alertBox.style.display = 'block';
+                document.getElementById('orderForm').reset();
+                setTimeout(() => { alertBox.style.display = 'none'; }, 5000);
+            } else {
+                alert(data.error || 'حدث خطأ أثناء الإرسال');
+            }
+        } catch (err) {
+            alert('تعذر الاتصال بالسيرفر المحلي.');
+        }
     });
 
     window.onload = loadPortfolio;

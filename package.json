@@ -1,0 +1,13 @@
+{
+  "name": "project-two-server",
+  "version": "1.0.0",
+  "description": "Standalone backend server for Project 2",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "sqlite3": "^5.1.7"
+  }
+}
